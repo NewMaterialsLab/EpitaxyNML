@@ -43,7 +43,6 @@ def matGen(N):
 				kk[0][1]=j
 				kk[1][0]=0
 				kk[1][1]=jj
-				#print kk 
 				genMatkk.append(kk)	
 		
 	return genMatkk
@@ -64,14 +63,9 @@ def getSuperSlabs(listMat,surfPrim):
 	for i in range(len(listMat)):
 		entry = [0.0]*3
 		#Generate new SuperSlab
-		#print listMat[i]
-		#print surfPrim
 		newLat =  np.dot(surfPrim,listMat[i]) 
-		#print newLat
 		#np.matmul(listMat[i], surfPrim)
 		#Compute modules and angles
-		#print newLat[0]
-		#print newLat[1]
 		u =  np.linalg.norm(newLat[0])
 		v =  np.linalg.norm(newLat[1])
 		alfa = angle(newLat[0],newLat[1]) 		
@@ -92,14 +86,10 @@ def compareSuperLattice(nSub,nTF,surfSub,surfTF,errAMax,arrAlphaMax):
 	genMatSub = [] 
 	genMatTF=[]
 	#Create superslabs generator matrixes
-	print "Printing MatGen for Sub",nSub 
 	genMatSub = matGen(nSub)
 	for i in range(len(genMatSub)):
-		print genMatSub[i]
-	print "Printing MatGen for TF ", nTF
 	genMatTF =  matGen(nTF)
 	for i in range(len(genMatTF)):
-		print genMatTF[i]
 
 	#Create superslab for Sub
 	superSlabSub = getSuperSlabs(genMatSub,surfSub)
@@ -114,11 +104,7 @@ def compareSuperLattice(nSub,nTF,surfSub,surfTF,errAMax,arrAlphaMax):
 			errA = 100*(superSlabSub[i][0]-superSlabTF[j][0])/superSlabTF[j][0]
 			errB = 100*(superSlabSub[i][1]-superSlabTF[j][1])/superSlabTF[j][1]
 			errAlpha = 100*(superSlabSub[i][2]-superSlabTF[j][2])/superSlabTF[j][2]
-			#print "SuperSub ", superSlabSub[i] 
-			#print "SuperTF ", superSlabTF[i] 
-			#print "Errors ", errA, errB, errAlpha 
 			if errA < errAMax and errB < errAMax and errAlpha < arrAlphaMax:
-				#print "MATCH"
 				entry.append(tempMCIA)
 				entry.append(nSub)
 				entry.append(nTF)
@@ -163,19 +149,15 @@ def calcAreasList(areaPrimTF,areaPrimSub,maxMCIA,maxAreaErr):
 	it = 1
 	while MCIA < maxMCIA:
 		MCIA =  areaPrimSub*float(it)
-		#print "it = ", it, " MCIA = ", MCIA
 		it2 = 1
 		dummyArea = 0.0
 		while dummyArea < maxMCIA:
 			dummyArea = areaPrimTF*float(it2)
-			#print "it2 = ", it2, " dummyArea = ", dummyArea
 			difArea = 100.0*(dummyArea-MCIA)/dummyArea
-			#print "difArea =", difArea
 			if abs(difArea) < maxAreaErr:
 				dummyVec = [0]*2
 				dummyVec[0] = it
 				dummyVec[1]=it2
-				#print "MATCH" 
 				listAreas.append(dummyVec)
 			it2 = it2 +1
 		it = it +1	
@@ -196,18 +178,13 @@ def main():
 	surfTF=readSurf(args.ThinFilm)
 	#Calculate  unit surface cell  area for thin film POSCAR 
 	areaPrimTF = np.linalg.norm(np.cross(surfTF[0],surfTF[1]))
-	#print surfTF
-	#print areaPrimTF
 	#Read unit surface cell for substrate film POSCAR 
 	surfSub=readSurf(args.Substrate)
 	#Calculate  unit surface cell  area for substrate POSCAR 
 	areaPrimSub = np.linalg.norm(np.cross(surfSub[0],surfSub[1]))
-	#print surfSub
-	#print areaPrimSub
 
 	#Check tentative MCIA and buld N1/N2 lookup table
 	listAreas = calcAreasList(areaPrimTF,areaPrimSub,args.maxMCIA,args.maxAreaErr);
-	print listAreas
 	for i in range(len(listAreas)):
 		compareSuperLattice(listAreas[i][0],listAreas[i][1],surfSub,surfTF,args.maxError_u,args.maxError_alpha)
 	
