@@ -1,7 +1,8 @@
 #!/usr/bin/env python 
 # Compares two slabs ans checks their commensurability 
 ################################################################################
-# Copyright Jose J. Plata, J. Amaya Suárez, E. R. Remesal    (2019)            #
+# Copyright Jose J. Plata, J. Amaya Suárez, E. R. Remesal, Antonio M. Márquez  #
+# and Javier Fdez Sanz		   (2019)  								           #
 #                                                                              #
 # This is free software: you can                                               #
 # redistribute it and/or modify it under the terms of the GNU General Public   #
