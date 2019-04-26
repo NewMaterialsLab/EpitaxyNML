@@ -1,5 +1,5 @@
 #!/usr/bin/env python 
-# Compares two slabs ans checks their conmensurability 
+# Compares two slabs ans checks their cmnmensurability 
 ################################################################################
 # Copyright Jose J. Plata, J. Amaya Suarez, E. R: Remesal, Antonio M. Marquez  #
 # and Javier Fdez Sanz		   (2019)  								           #
