@@ -1,7 +1,6 @@
  #include "interface_builder.h"
  
  vector<vector<double> > readSurf(string namefile){
-   //cout << namefile<< std::endl;
    vector<vector<double> > kk(2, vector<double>(2));
    vector<vector<double> > surf3D(3, vector<double>(3));
    std::ifstream infile;
@@ -36,18 +35,13 @@
    while(MCIA < maxMCIA){
      dummyVec[0]=it;
      MCIA = areaPrimSub*it;
-	 //cout << "it = " << it << "MCIA = " << MCIA << std::endl;
      int it2 = 1;
      double dummyArea = 0.0;
      while(dummyArea < maxMCIA){
        dummyVec[1]=it2;
        dummyArea = areaPrimTF*it2;
-	 	//cout << "it2 = " << it2 << "dummyArea = " << dummyArea << std::endl;
        double difArea = 100*(dummyArea-MCIA)/dummyArea;
-		//cout << "difArea = " << difArea <<std::endl; 
        if(abs(difArea)<maxAreaErr){
-         //cout << "Matching Areas " << dummyVec[0] << " " << dummyVec[1] << std::endl;
-		 //cout << "MATCH " << std::endl;
          listAreas.push_back(dummyVec);
        }
        it2 = it2 + 1;
@@ -67,15 +61,7 @@
    vector<vector<vector<int> > > genMatSub, genMatTF;
    // Create superslabs generator matrixes
    genMatSub = matGen(nSub);
-   cout << " Printing MatGen for Sub " << nSub << std::endl;
-   for(int i=0; i<genMatSub.size(); i++){
-	 cout << genMatSub[i][0][0] << " " << genMatSub[i][0][1] << " " << genMatSub[i][1][0] << " " << genMatSub[i][1][1] << std::endl; 
-	}
    genMatTF =  matGen(nTF);
-   cout << " Printing MatGen for TF " << nSub << std::endl;
-   for(int i=0; i<genMatTF.size(); i++){
-	 cout << genMatTF[i][0][0] << " " << genMatTF[i][0][1] << " " << genMatTF[i][1][0] << " " << genMatTF[i][1][1] << std::endl; 
-	}
 
    //Create superslab for Sub
    vector<vector<double> >superSlabSub;
@@ -140,9 +126,6 @@
        double errA = 100*(superSlabSub[i][0]-superSlabTF[j][0])/superSlabTF[j][0];
        double errB = 100*(superSlabSub[i][1]-superSlabTF[j][1])/superSlabTF[j][1];
        double errAlpha = 100*(superSlabSub[i][2]-superSlabTF[j][2])/superSlabTF[j][2]; 
-      //cout << "SurperSub " << superSlabSub[i][0] << " " << superSlabSub[i][1] << " " << superSlabSub[i][2] << std::endl; 
-      //cout << "SurperTF " << superSlabTF[i][0] << " " << superSlabTF[i][1] << " " << superSlabTF[i][2] << std::endl; 
-	  //cout << " Errors " << errA << " " << errB << " " << errAlpha << std::endl;
       if(abs(errA) < 5.0 && abs(errB) < 5.0 && abs(errAlpha) < 5.0){ // IMPORTANT THRESHOLD !!!!!!!!
          entry[0]=tempMCIA;
          entry[1]=nSub;
@@ -202,12 +185,11 @@
  } 
 
  void printList(){
-   //cout << "En print List " << std::endl;
    ofstream mylist;
    mylist.open ("list.dat");
    mylist << "[INTERFACES]***************************************************************************************" << std::endl;
    mylist << "[MATCHING INTERFACES]START" << std::endl;
-   mylist << "    MCIA  N_TF  N_Sub   Err_a    Err_b  Err_alpha   MAT_TF     MAT_SUB      " << std::endl;
+   mylist << "    MCIA  N_TSub  N_TF   Err_a    Err_b  Err_alpha   MAT_Sub     MAT_TF      " << std::endl;
    for(int i=0; i<listR.size(); i++){
      mylist << setw(8) <<listR[i][0] << setw(6) <<  int(listR[i][1]) << setw(6) <<  int(listR[i][2])  <<  setprecision(4) << setw(10) <<  listR[i][3] << setprecision(4) <<  setw(10) << listR[i][4] << setprecision(3) << setw(10) <<  listR[i][5] << setw(6) <<  int(listR[i][6]) << setw(3) <<  int(listR[i][7]) << setw(3) << int(listR[i][8]) << setw(3) << int(listR[i][9]) << setw(6) <<  int(listR[i][10]) << setw(3) <<  int(listR[i][11]) << setw(3) <<  int(listR[i][12]) << setw(3) <<  int(listR[i][13]) << "  " << std::endl;
    } 
@@ -232,22 +214,17 @@
 
    // Read unit surface cell for thin film POSCAR 
    surfTF=readSurf("thinF.POSCAR");
-   //cout << surfTF[0][0] << " " << surfTF[0][1] << " " << surfTF[1][0] << " "  << surfTF[1][1] << std::endl;
    // Calculate  unit surface cell  area for thin film POSCAR 
    double areaPrimTF = calcArea(surfTF);
-   //cout << areaPrimTF << std::endl;
     // Read unit surface cell for substrate film POSCAR 
    surfSub=readSurf("subs.POSCAR");
-   //cout << surfSub[0][0] << " " << surfSub[0][1] << " " << surfSub[1][0] << " "  << surfSub[1][1] << std::endl;
    // Calculate  unit surface cell  area for substrate POSCAR 
    double areaPrimSub = calcArea(surfSub);
-   //cout << areaPrimSub << std::endl;
 
    // Check tentative MCIA and buld N1/N2 lookup table
    vector<vector<int> > listAreas;
    listAreas = calcAreasList(areaPrimTF,areaPrimSub);
    for(int i=0;i<listAreas.size();i++){
-	cout << listAreas[i][0] << " " << listAreas[i][1] << std::endl;
      //Compare each potential matching areas
      compareSupperLattice(listAreas[i][0],listAreas[i][1]);
    }
