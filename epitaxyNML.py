@@ -195,7 +195,7 @@ def main():
 	f= open(filename,"w+")
 	f.write("# Conmensurability between {:>18} as substrate and {:>18} as thin film using epitaxyNML \n".format(args.Substrate,args.ThinFilm))
 	f.write("#####################################################################################################################################\n")
-	f.write("#{:>10}{:>15}{:>15}{:>14}{:>14}{:>15}{:>15}{:>25}        #\n".format("MCIA","N_TF","N_Sub","Err_a","Err_b","Err_alpha","MAT_TF","MAT_SUB"))
+	f.write("#{:>10}{:>15}{:>15}{:>14}{:>14}{:>15}{:>15}{:>25}        #\n".format("MCIA","N_TF","N_Sub","Err_a","Err_b","Err_alpha","MAT_TF","MAT_Sub"))
 	f.write("#####################################################################################################################################\n")
 
 	for entry in listR:
