@@ -1,5 +1,5 @@
 # EpitaxyNML
-The Epitaxy NML is an application to check the conmensurability between two slabs based on the paper of Zur and McGill, [J. Appl. Phys. 55 (2)](https://aip.scitation.org/doi/10.1063/1.333084)
+EpitaxyNML is an application to check the conmensurability between two slabs based on the paper of Zur and McGill, [J. Appl. Phys. 55 (2)](https://aip.scitation.org/doi/10.1063/1.333084)
 
 Only two POSCAR files are required as input. 
 
